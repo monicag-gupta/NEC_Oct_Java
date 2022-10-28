@@ -1,0 +1,113 @@
+package day2OOPS;
+
+class Emp{ //Encapsulation : blueprint of all emps
+	//Encapsulation : Data hiding
+	private int id;
+	private String name;
+	protected int sal;
+	//Abstracted
+	//Properties of id, name : getters and setters
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getSal() {
+		return sal;
+	}
+	public void setSal(int sal) {
+		this.sal = sal;
+	}
+	public Emp() {}
+	public Emp(int id, String name, int sal) {
+		this.id = id;
+		this.name = name;
+		this.sal = sal;
+	}
+	public void print() {
+		System.out.print("\nName: " + name + " with id : " + id);
+	}
+	
+}
+class Manager extends Emp{ //Inheritance
+	public Manager() { } 
+	public Manager(int s) { sal=s;}
+	public void print() {
+		super.print();
+		System.out.println(" getting sal as Manager " + sal);
+	}
+}
+class Developer extends Emp{
+	public Developer() { } 
+	public Developer(int s) { sal=s;}
+	public void print() {
+		super.print();
+		System.out.println(" getting sal as Developer " + sal);
+	}
+}
+
+public class Pillars {
+	public void print() { //overloading : fn1
+		System.out.println("No Param Print() !");
+	}
+	public void print(Emp e) { //Overloading fn1 as different number of Param: fn2
+		System.out.println("Emp Param Print(Emp e) !");
+		e.print();
+	}
+	public void print(Pillars e) { //Overloading fn2 as different type of Param: fn3
+		System.out.println("Pillars Param Print(Pillars e) !");
+		e.print();
+	}
+	public void print(Emp e, Pillars p) { //Overloading fn1, f2, f3 as different number of Param: fn4
+		System.out.println("Emp, Pillars Param Print(Emp e, Pillars p) !");
+		e.print();
+		p.print();
+	}
+	public void print(Pillars e, Emp p) { //Overloading fn4 as different series of Param: fn5
+		System.out.println("Pillars, Emp Param Print(Pillars p, Emp e) !");
+		e.print();
+		p.print();
+	}
+
+	public static void main(String[] args) {
+		
+		Manager m=new Manager(4500); //creating parameterized object of Manager
+		m.setId(101);
+		m.setName("M1");
+		Developer d=new Developer(5500);
+		d.setId(102);
+		d.setName("D1");
+		Pillars p=new Pillars(); //creating default object of Pillars
+		p.print();
+		p.print(m);
+		p.print(m,p);
+		p.print(d);
+		p.print(p,d);
+	}
+
+}
+
+/* Output:
+ * No Param Print() !
+Emp Param Print(Emp e) !
+
+Name: M1 with id : 101 getting sal as Manager 4500
+Emp, Pillars Param Print(Emp e, Pillars p) !
+
+Name: M1 with id : 101 getting sal as Manager 4500
+No Param Print() !
+Emp Param Print(Emp e) !
+
+Name: D1 with id : 102 getting sal as Developer 5500
+Pillars, Emp Param Print(Pillars p, Emp e) !
+No Param Print() !
+
+Name: D1 with id : 102 getting sal as Developer 5500
+*/
