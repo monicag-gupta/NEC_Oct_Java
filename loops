@@ -1,3 +1,46 @@
+class Main { 
+    public static void main(String args[])     { 
+    first: // First label 
+        for (int i = 0; i < 3; i++) { 
+          second: 		// Second label 
+            for (int j = 0; j < 3; j++) { 
+                if (i == 1 && j == 1) { 
+                      // Using continue statement with label 
+                    continue first; 
+                } 
+                if(j == 2)
+  		 continue;     //continue to next iteration
+                System.out.println(i + " " + j); 
+            } 
+        } 
+    } 
+}
+
+
+
+
+public class Main {
+  public static void main(String[] args)
+  {
+      System.out.println("Hello");
+      for(int count = 1; count < 11; count++){
+          if (count==7)
+                break;
+          if(count==5)
+                continue;
+         System.out.println("Count is: " + count);
+      }
+  }
+}
+
+
+
+
+
+
+
+
+
 public class ForDemo {
 public static void main(String[] args){
   for(int count = 1; count < 11; count++)
