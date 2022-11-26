@@ -18,3 +18,122 @@ mybatis-config.xml:
       <mapper resource = "org/mybatis/StudentMapper.xml"/>
    </mappers>
 </configuration>
+
+
+
+StudentMapper.xml:
+
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Student">
+ 	<insert id="insert" parameterType="org.mybatis.Student">
+ 		INSERT INTO STUDENT (NAME, COURSE, ROLL ) VALUES (#{name}, #{course}, #{roll});
+ 	</insert>
+ 	<resultMap id="result" type="org.mybatis.Student">
+ 		<result property="id" column="id" />		<result property="name" column="name" />
+ 		<result property="course" column="course" />	<result property="roll" column="roll" />
+ 	</resultMap>
+ 	<select id="getById" parameterType="int" resultMap="result">
+ 		SELECT * FROM STUDENT WHERE ID = #{id};
+ 	</select>
+ 	<update id="update" parameterType="org.mybatis.Student">
+ 		UPDATE STUDENT SET NAME = #{name}, course = #{course}, roll = #{roll} WHERE ID = #{id};
+ 	</update>
+ 	<delete id="deleteById" parameterType="int">
+ 		DELETE from STUDENT WHERE ID = #{id};
+ 	</delete>
+ 	<select id="getAll" resultMap="result">
+ 		SELECT * FROM STUDENT;
+ 	</select>
+</mapper>
+
+
+
+
+Student.java:
+package org.mybatis;
+public class Student {
+	private int id;
+	private String name;
+	private String course;
+	private int roll;
+	public Student(String name, String course, int roll) {
+		this.name = name;	this.course = course;	this.roll = roll;	}	
+	public Student() {	}	
+	public String toString() {
+		return "\nID: " + id + " Name: " + name + " Roll: " + roll + " Course: " + course;	}
+	public int getId() {	return id;	}
+	public void setId(int id) {		this.id = id;	}
+	public String getName() {		return name;	}
+	public void setName(String name) {		this.name = name;	}
+	public String getCourse() {		return course;	}
+	public void setCourse(String course) {		this.course = course;	}
+	public int getRoll() {		return roll;	}
+	public void setRoll(int roll) {		this.roll = roll;	}
+}
+
+
+
+Main.java
+
+package org.mybatis;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.List;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+public class Main {
+	public static void main(String[] args) {
+		try {
+			Reader reader = Resources.getResourceAsReader("mybatis-config.xml");
+			SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+			SqlSession session = sqlSessionFactory.openSession();
+
+
+ 			/* Student student = new Student("Ishu5","BTech", 5 );
+			 //Insert student data 
+			  session.insert("Student.insert", student);
+			  System.out.println("record inserted successfully");  */
+			 /* System.out.println("List of Data");
+			  * List<Student> student = session.selectList("Student.getAll");
+			  for(Student st : student ){ System.out.print(st); }
+			  System.out.println("\nRecords Read Successfully ");  */
+			 /* //select a particular student by id 
+			  Student student = (Student)session.selectOne("Student.getById", 2);
+		      System.out.println(student);	  */
+
+
+ 			/*   Student student = (Student)session.selectOne("Student.getById", 2);
+			   System.out.println("Current details of the student are" );
+			   System.out.println(student.toString());
+			  //Set new values
+			   student.setRoll(7); student.setCourse("PHD");
+			  //Update the student record 
+			   session.update("Student.update",student);
+			   System.out.println("Record updated successfully"); 
+			   session.commit();
+			   //verifying the record 
+			   Student std = (Student)session.selectOne("Student.getById", 2);
+			   System.out.println("Details of the student after update operation" );
+			   System.out.println(std.toString()); 	 */
+
+
+ 			  /* System.out.println("List Before Deletion"); 
+			   List<Student> student = session.selectList("Student.getAll"); 
+			   for(Student st : student ){
+			        System.out.println(st); }
+			  //Delete operation 
+			   session.delete("Student.deleteById", 6); 
+			   session.commit();
+			   System.out.println("Record deleted successfully");
+			   System.out.println("List after Deletion");
+			   student = session.selectList("Student.getAll");
+			   for(Student st : student ){
+			         System.out.println(st); }		*/
+ 			session.commit();
+    		session.close();
+ 		} catch (IOException e) {
+ 		e.printStackTrace();		}	}	}
+ 
