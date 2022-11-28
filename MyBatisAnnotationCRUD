@@ -1,0 +1,170 @@
+src/mybatis_config.xml:
+
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+   <environments default = "development">
+      <environment id = "development">
+         <transactionManager type = "JDBC"/> 
+         <dataSource type = "POOLED">
+            <property name="driver" value="org.postgresql.Driver" />
+ 			<property name="url" value="jdbc:postgresql://localhost:5432/javadb" />
+ 			<property name="username" value="postgres" />
+ 			<property name="password" value="password" />
+         </dataSource>   
+      </environment>
+   </environments>
+   <mappers>
+      <mapper class="org.mybatis.Student_mapper"/>   
+   </mappers>
+</configuration>
+
+
+
+In org.mybatis package:
+Student_mapper.java:
+package org.mybatis;
+import java.util.List;
+import org.apache.ibatis.annotations.*;
+public interface Student_mapper {
+   final String getAll = "SELECT * FROM STUDENT"; 
+   final String getById = "SELECT * FROM STUDENT WHERE ID = #{id}";
+   final String deleteById = "DELETE from STUDENT WHERE ID = #{id}";
+   final String insert = "INSERT INTO STUDENT (NAME, COURSE, ROLL) VALUES (#{name}, #{course}, #{roll})";
+   final String update = "UPDATE STUDENT SET NAME = #{name}, COURSE = #{course}, ROLL = #{roll} WHERE ID = #{id}";
+   @Select(getAll)
+   @Results(value = {
+      @Result(property = "id", column = "ID"),
+      @Result(property = "name", column = "NAME"),
+      @Result(property = "course", column = "COURSE"),
+      @Result(property = "roll", column = "ROLL")
+   })
+   List<org.mybatis.Student> getAll();
+
+   @Select(getById)
+   @Results(value = {
+      @Result(property = "id", column = "ID"),
+      @Result(property = "name", column = "NAME"),
+      @Result(property = "course", column = "COURSE"),
+      @Result(property = "roll", column = "ROLL")
+   })
+   Student getById(int id);
+   @Update(update)
+   void update(Student student);
+   @Delete(deleteById)
+   void delete(int id);
+   @Insert(insert)
+   //@Options(useGeneratedKeys = true, keyProperty = "id")
+   void insert(Student student);
+}
+
+   
+
+
+Student.java:
+package org.mybatis;
+
+public class Student {
+	private int id;
+	private String name;
+	private String course;
+	private int roll;
+
+	public Student(String name, String course, int roll) {
+		this.name = name;
+		this.course = course;
+		this.roll = roll;
+	}
+
+	public Student() {
+	}
+
+	public String toString() {
+		return "\nID: " + id + " Name: " + name + " Roll: " + roll + " Course: " + course;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getCourse() {
+		return course;
+	}
+
+	public void setCourse(String course) {
+		this.course = course;
+	}
+
+	public int getRoll() {
+		return roll;
+	}
+
+	public void setRoll(int roll) {
+		this.roll = roll;
+	}
+}
+
+
+
+
+Main.java:
+package org.mybatis;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.List;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+public class Main {
+	public static void main(String[] args) {
+		try {
+			  Reader reader = Resources.getResourceAsReader("mybatis-config.xml");
+		      SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);		
+		      SqlSession session = sqlSessionFactory.openSession();
+		      //session.getConfiguration().addMapper(Student_mapper.class);
+		      Student_mapper mapper = session.getMapper(Student_mapper.class); 
+		      
+			   /*  //Create a new student object
+		      Student student = new Student("Ishu7", "MBBS", 8);
+		      //Insert student data   
+		      mapper.insert(student);
+		      System.out.println("record inserted successfully"); */
+		   /* //select a particular student using id		
+		      Student student = mapper.getById(2);
+		      System.out.println("Current details of the student are "+student.toString());  
+		      //Set new values to the mail and phone number of the student
+		      student.setCourse("MTech");
+		      student.setRoll(8);
+		      //Update the student record
+		      mapper.update(student);
+		      System.out.println("Record updated successfully");   */ 
+		   /*   //Get the student details
+	          Student student = mapper.getById(2);
+              System.out.println(student);			*/
+
+	 		  /*  mapper.delete(7);
+		      System.out.println("record deleted successfully");  */  
+		      
+		      
+		    //List<Student> student = session.selectList("Student.getAll")
+		      List<Student> std = mapper.getAll();
+              for(Student s : std)
+            	  System.out.println(s);		
+		      session.commit();
+		      session.close();
+		} catch (IOException e) {
+			e.printStackTrace();		}	}	}
+
