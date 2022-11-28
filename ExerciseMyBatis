@@ -1,0 +1,4 @@
+Design a table Employee(Eid, Ename, Esal) in postgres
+
+Prepare a menu driven program in Java via MyBatis to perform CRUD operation on the table.
+(Mapper : XML/Annotation)
